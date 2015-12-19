@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'/>
+	<link rel="stylesheet" href="foundation.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" />
+	<link rel="stylesheet" href="app.css" />
+
+	<meta charset="UTF-8">
+	<title>Clock</title>
+
+
+</head>
+<body>
+	<div class="row">
+		<div class="text-center small-12 small-centered columns">
+			<div class="row">
+
+			  <div id="gameClock"class=" small-centered columns">
+			  	<span class='clockButtons badge primary' id='minusMinuteBtn'><i class='fi-minus'></i></span><span id='plusMinuteBtn'class='clockButtons badge primary'><i class='fi-plus'></i></span><span id='gameTime'>00:02</span><span id='minusSecondBtn'class='clockButtons badge primary'><i class='fi-minus'></i></span><span id='plusSecondBtn' class='clockButtons badge primary'><i class='fi-plus'></i></span>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+	  <div class="text-center small-8 small-centered columns"><span id='rewindClockBtn'class='playButtons badge primary'><i class='fi-rewind'></i></span><span id='playClockBtn' class='playButtons badge success'><i class='fi-play'></i></span><span id='stopClockBtn' class='playButtons badge alert'><i class='fi-stop'></i></span><span id='pauseClockBtn'class='playButtons badge secondary'><i class='fi-pause'></i></span><span id='fastForwardClockBtn'class='playButtons badge primary'><i class='fi-fast-forward'></i></span></div>
+	</div>
+	<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+#ddd{
+	/*-webkit-user-select: none;*/  /* Chrome all / Safari all */
+	/*-moz-user-select: none; */    /* Firefox all */
+	/*-ms-user-select: none;  */    /* IE 10+ */
+/*	user-select: none;*/          /* Likely future */ 
+}
+#shotbox{
+	background:pink;
+	display: none;
+}
+
+h1, h2, h3, h4, h5, h6{
+	margin: auto;
+	display:block;
+}
+#home{
+	display:flex;
+	border: solid 1px gray;
+}
+#infoform{
+	display:block;
+	position: absolute;
+	bottom:0;
+}
+#homeTeam{
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none;          /* Likely future */ 
+	padding-top: -20px;
+	margin-top:-10px;
+}
+#visitorTeam{
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none;          /* Likely future */ 
+	padding-top: -20px;
+	margin-top:-10px;
+}
+.moroom{
+	padding:0;
+	margin:0;
+	padding-top: -10px;
+	margin-top: -10px;
+
+}
+.playerIcons{
+	float: right;
+	font-size: 9px;
+	position:absolute;
+	top:0px;
+	right: 0px;
+}
+.hidden{
+	display:none;
+}
+#gameClock{
+
+	background-color: white;
+	color:red;
+	font-size: 69px;
+	font-family: 'Orbitron', sans-serif;
+	height:100px;
+
+}
+#gameTime{
+	text-shadow: 0 0 3px #FF0000, 0 0 5px red;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px; /* future proofing */
+	padding-top: 15px;
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color: black;
+	width:fixed;
+}
+.playButtons{
+	margin:5px;
+	font-size: 17px;
+	text-shadow: 0 0 3px black;
+
+}
+.playButtons:active{
+	background-color: black;
+text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9);
+}
+.clockButtons{
+	text-shadow: 0 0 3px black;
+	margin:5px;
+	font-size: 17px;
+}
+.clockButtons:active{
+	background-color: black;
+	text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9);
+
+}
+.shotboxBtn{
+	padding: 10px;
+	font-size: 20px;
+}
+#cancle{
+	position:absolute;
+	bottom:0px;
+	right:0px;
+}
+#travel{
+	color:yellow;
+	background-color: black;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px; /* future proofing */
+}
+.courtMarker::before{
+	text-shadow: 0 0 3px #FF0000, 0 0 5px red;
+}
