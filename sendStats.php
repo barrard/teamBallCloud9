@@ -13,12 +13,21 @@ if (!empty($_POST['shotId'])) {
 	$eventCoordsY = '';
 	$playerId = '';
 	$shotType = '';
+	$teamId ='';
+	$time= '';
+	$player= '';
+	$gameId= '';
 	$shotId = $_POST['shotId'];
 	$eventCoordsX = $_POST['eventCoordsX'];
 	$eventCoordsY = $_POST['eventCoordsY'];
 	$playerId = $_POST['playerId'];
 	$shotType = $_POST['shotType'];
-	$sql = "INSERT INTO playerStats (shotId, eventCoordsX, eventCoordsY, playerId, shotType) VALUES ('$shotId', '$eventCoordsX', '$eventCoordsY', '$playerId', '$shotType')";
+	$teamId = $_POST['teamId'];
+	$time=$_POST['time'];
+	$player=$_POST['player'];
+	$gameId=$_POST['gameId'];
+
+	$sql = "INSERT INTO playerStats (shotId, eventCoordsX, eventCoordsY, playerId, shotType, teamId, time, player, gameId) VALUES ('$shotId', '$eventCoordsX', '$eventCoordsY', '$playerId', '$shotType', '$teamId', '$time', '$player', '$gameId')";
 	if (mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql)) {
 		echo "Stats for Player ".$playerId." added succesfully to the database.";
 	}else{

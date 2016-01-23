@@ -17,14 +17,13 @@
 	        $_SESSION['teamId']= $row['teamId'];
 		  }
 
-	$loggedin = true;
-	header('Location: http://localhost/ballshot%20(AJAX)/');
+	header('Location: http://localhost/ballshotAJAX/');
 	 }}}?>
 
 
+<h1>Login</h1>
 
-
-<form action="" method='post'>
+<form autocomplete="off" action="" method='post'>
 <div class="row">		
 	<div class="small-3 columns">
 

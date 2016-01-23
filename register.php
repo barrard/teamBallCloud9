@@ -17,7 +17,7 @@ if (!empty($_POST['register'])) {
 			mysqli_query($db, $query) or trigger_error(mysqli_error($db)." in ".$query);
 			$loggedin = true;
 			$teamName=$_SESSION['teamName'];
-			header('Location: http://localhost/ballshot%20(AJAX)/?page=login');
+			header('Location: http://localhost/ballshotAJAX/?page=login');
 		}else
 			// echo $rsd;
 			echo("The username <i>'$teamName'</i> already exists '<a href='?page=register'>&larr; Back</a>");
@@ -25,7 +25,7 @@ if (!empty($_POST['register'])) {
 
 
 
-
+<h1>Register</h1>
 <form action="" method='post'>
 <table>
 	<tr>

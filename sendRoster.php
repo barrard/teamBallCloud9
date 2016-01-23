@@ -1,5 +1,5 @@
 <?php 
-include 'connection/session.php';
+// include 'connection/session.php';
 include 'connection/database.php'; 
 global $db;
 if (!empty($_POST['teamId'])) {
@@ -21,5 +21,6 @@ if (!empty($_POST['teamId'])) {
   $sql = "INSERT INTO players (teamId, firstName, lastName, playerNumber, playerNotes, playerPosition, starter) VALUES ($teamId, '$firstName', '$lastName', $playerNumber, '$playerNotes', '$playerPosition', '$starter')";
   mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
 }
+echo "echo from sendRoster.php";
 
 

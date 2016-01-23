@@ -110,10 +110,10 @@ CREATE TABLE IF NOT EXISTS `playerStats1` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `teams`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `teams` (
   `teamId` int(5) NOT NULL,
   `teamName` varchar(250) NOT NULL,
   `password` varchar(250) NOT NULL
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`teamId`, `teamName`, `password`) VALUES
+INSERT INTO `teams` (`teamId`, `teamName`, `password`) VALUES
 (17, 'bbb', 'b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86'),
 (18, 'blurr', 'b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86'),
 (19, 'blurrfsdfasdad1', 'b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86'),
@@ -165,9 +165,9 @@ ALTER TABLE `playerStats`
   ADD PRIMARY KEY (`Id`);
 
 --
--- Indexes for table `users`
+-- Indexes for table `teams`
 --
-ALTER TABLE `users`
+ALTER TABLE `teams`
   ADD PRIMARY KEY (`teamId`);
 
 --
@@ -185,9 +185,9 @@ ALTER TABLE `players`
 ALTER TABLE `playerStats`
   MODIFY `Id` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=30;
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `teams`
 --
-ALTER TABLE `users`
+ALTER TABLE `teams`
   MODIFY `teamId` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=40;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

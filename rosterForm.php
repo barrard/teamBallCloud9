@@ -7,7 +7,7 @@ $rsd = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
 while($row = mysqli_fetch_assoc($rsd)) { 
 $teamId=$row['teamId'];
  } ?>
- <form action=""method='post'>
+ <form autocomplete="off" action=""method='post'>
 
 <input type="text" name='teamId'id='teamIdTag' value="<?php echo $teamId; ?>">
  <div class="row">

@@ -1,9 +1,88 @@
 $(document).foundation();
 
+function getTeamInfo(val){
+	var xhr = new XMLHttpRequest();
+	// var teamName = val;
+	var url = 'getTeamInfo.php?teamName='+val;
+
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState==4&&xhr.status==200) {
+			response = xhr.responseText;
+			document.getElementById('opponentInfo').innerHTML = response;	
+			getGameHistory();
+		//	$(document).foundation()
+		};
+	};
+
+		xhr.open('GET', url, true);
+		xhr.send();
+	}
+
+function getGameHistory(){
+	var xhr = new XMLHttpRequest();
+	var homeId = document.getElementById('homeId').innerHTML;
+	var visitorId = document.getElementById('opponentIdNumber').innerHTML;
+	var url = 'getGameHistory.php?homeTeamId='+homeId+'&visitorTeamId='+visitorId;
+
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState==4&&xhr.status==200) {
+			response = xhr.responseText;
+			console.log(document.getElementById('opponentIdNumber').innerHTML);
+			console.log(document.getElementById('homeId').innerHTML);
+
+			document.getElementById('gameHistory').innerHTML = response;	
+			//$(document).foundation()
+		};
+	};
+
+		xhr.open('GET', url, true);
+		xhr.send();
+
+}
+
+
+
 function sendRoster(){
 	var xhr = new XMLHttpRequest();
 	var url = 'sendRoster.php';
+	// var playerId = document.getElementById('playerId').value;
+	var teamIdTag = document.getElementById('teamIdTag').value;
+	var firstName = document.getElementById('firstName').value;
+	var lastName = document.getElementById('lastName').value;
+	var playerNumber = document.getElementById('playerNumber').value;
+	var playerNotes = document.getElementById('playerNotes').value;
+	var playerPosition = document.getElementById('playerPosition').value;
+	var starter = document.getElementById('starter').value;
+	var query="teamId="+teamIdTag+"&firstName="+firstName+"&lastName="+lastName+"&playerNumber="+playerNumber+"&playerNotes="+playerNotes+"&playerPosition="+playerPosition+"&starter="+starter;
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	// xhr.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+	// xhr.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+	// xhr.setDateHeader("Expires", 0); // Proxies.
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status==200){
+			var returnData=xhr.responseText;
+			//document.getElementById('resptxt').innerHTML=returnData;
+			getHomeTeamList();
+			getVisitorTeamList();
+
+			console.log('roster send');
+		}
+	}
+	xhr.send(query);
+	document.getElementById('resptxt').innerHTML="AJAX!";
+console.log("Sending The Roster adding a Player");
+console.log('teamId '+teamIdTag);
+document.getElementById('homeTeamList').innerHTML = '';
+$('#teamIdTag').val('');
+$('#firstName').val('');
+$('#lastName').val('');	}
+
+function updateRoster(){
+	var xhr = new XMLHttpRequest();
+	var url = 'updateRoster.php';
 	var teamId = document.getElementById('teamIdTag').value;
+	var playerId = document.getElementById('playerId').value;
 	var firstName = document.getElementById('firstName').value;
 	var lastName = document.getElementById('lastName').value;
 	var playerNumber = document.getElementById('playerNumber').value;
@@ -11,7 +90,7 @@ function sendRoster(){
 	var playerPosition = document.getElementById('playerPosition').value;
 	var starter = document.getElementById('starter').value;
 
-	var query="teamId="+teamId+"&firstName="+firstName+"&lastName="+lastName+"&playerNumber="+playerNumber+"&playerNotes="+playerNotes+"&playerPosition="+playerPosition+"&starter="+starter;
+	var query="teamId="+teamId+"&playerId="+playerId+"&firstName="+firstName+"&lastName="+lastName+"&playerNumber="+playerNumber+"&playerNotes="+playerNotes+"&playerPosition="+playerPosition+"&starter="+starter;
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xhr.onreadystatechange = function(){
@@ -19,40 +98,96 @@ function sendRoster(){
 			var returnData=xhr.responseText;
 			document.getElementById('resptxt').innerHTML=returnData;
 			getHomeTeamList();
+			getVisitorTeamList();
+
 		}
 	}
 	xhr.send(query);
 	document.getElementById('resptxt').innerHTML="AJAX!";
-console.log("Sending The Roster adding a Player");
+console.log("Sending The Updted Roster information to Player");
 console.log(teamId);
+document.getElementById('homeTeamList').innerHTML = '';
+$('#teamIdTag').val('');
+$('#firstName').val('');
+$('#lastName').val('');
 	}
 
-function rosterForm(){
+
+// function rosterForm(){
+// 	var xhr = new XMLHttpRequest();
+
+// 	xhr.onreadystatechange = function(){
+// 		if (xhr.status == 200) {
+// 			document.getElementById('innerForm').innerHTML = xhr.responseText;	
+// 		};
+// 	};
+
+// 	xhr.open('GET', 'rosterForm.php', true);
+// 	xhr.send(null);
+// }
+
+function getHomeTeamList(){
+	console.log("Im going to little beacg");
 	var xhr = new XMLHttpRequest();
-
-	xhr.onload = function(){
-		if (xhr.status == 200) {
-			document.getElementById('innerForm').innerHTML = xhr.responseText;	
-		};
-	};
-
-	xhr.open('GET', 'rosterForm.php', true);
-	xhr.send(null);
+	var url = 'getHomeTeam.php';
+	var teamId = document.getElementById('homeId').innerHTML;
+	var visitorName = document.getElementById('opponentName').innerHTML;
+	console.log(teamId+' '+visitorName);
+	var query = "?teamId="+teamId;
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState == 4 && xhr.status==200){
+			var returnData=xhr.responseText;
+			document.getElementById('homeTeamList').innerHTML=returnData;
+		}
+	}
+	xhr.open('GET', url+query, true);
+	xhr.send();
 }
 
-function getHomeTeamList(event){
-	this.event.preventDefault();
+function getVisitorTeamList(){
+	console.log("Im going to little beacg");
 	var xhr = new XMLHttpRequest();
+	var url = 'getVisitorTeamList.php';
+	var opponentId = document.getElementById('opponentId').innerHTML;
+	var opponentName = document.getElementById('opponentName').innerHTML;
+	console.log('opponentId '+opponentId+' and opponentName '+opponentName);
+	var query = "?opponentId="+opponentId;
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState == 4 && xhr.status==200){
+			
+			document.getElementById('visitorTeamList').innerHTML=xhr.responseText;
+			// getVisitorTeamList();
+		}
+	}
+	xhr.open('GET', url+query, true);
+	xhr.send();
+}
 
-	xhr.onload = function(){
-		if (xhr.status == 200) {
-			document.getElementById('homeTeamList').innerHTML = xhr.responseText;	
-			$(document).foundation()
+
+function newGame(){
+	// this.event.preventDefault();
+	var xhr = new XMLHttpRequest();
+	var url = 'newGame.php';
+	var homeId = document.getElementById('homeId').innerHTML;
+	var visitorId = document.getElementById('opponentIdNumber').innerHTML;
+	var dateString = document.getElementById('dateString').innerHTML;
+	var homeName = document.getElementById('homeName').innerHTML;
+	var visitorName = document.getElementById('visitorName').innerHTML;
+	var query = "?homeTeamId="+homeId+"&visitorTeamId="+visitorId+"&homeTeamName="+homeName+"&visitorTeamName="+visitorName+"&dateString="+dateString;
+
+
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status==200){
+			 location.reload();
+			console.log("NewGeame "+visitorId);
+			getHomeTeamList();
+			getVisitorTeamList();
 		};
 	};
 
-	xhr.open('GET', 'getHomeTeam.php', true);
-	xhr.send(null);
+	xhr.open('GET', url+query, true);
+	xhr.send();
+
 }
 
 
@@ -230,19 +365,45 @@ function fastForwardClock(){
 function sendStats(){
 	var xhr = new XMLHttpRequest();
 	var url = 'sendStats.php';
+	var time = document.getElementById('gameTime').innerHTML;
+	var teamId = document.getElementById('teamId').value;
 	var shotId = document.getElementById('shotId').value;
 	var eventCoordsX = document.getElementById('eventCoordsX').value;
 	var eventCoordsY = document.getElementById('eventCoordsY').value;
 	var playerId = document.getElementById('playerId').value;
+	var gameId = document.getElementById('gameId').innerHTML;
 	var shotType = shotList[$eventCount-1];
 	if (shotType == 'miss') {
 		shotType = 0;
-	}else{
+	}else if(shotType == 'freethrow'){
 		shotType = 1;
+	}else if(shotType == 'made'){
+		shotType = 2;
+	}else if(shotType == 'three'){
+		shotType = 3;
+	}else if(shotType == 'block'){
+		shotType = 4;
+	}else if(shotType == 'steal'){
+		shotType = 5;
+	}else if(shotType == 'assist'){
+		shotType = 6;
+	}else if(shotType == 'rebound'){
+		shotType = 7;
+	}else if(shotType == 'turnover'){
+		shotType = 8;
+	}else if(shotType == 'foul'){
+		shotType = 9;
+	}else if(shotType == 'travel'){
+		shotType = 10;
+	}else if(shotType == 'freethrow'){
+		shotType = 11;
 	}
+
+
+
 	console.log('SEND IT! '+shotList[$eventCount-1]);
 	console.log('COUNT IT!! '+shotType);
-	var query = "shotId="+shotId+"&eventCoordsX="+eventCoordsX+"&eventCoordsY="+eventCoordsY+"&playerId="+playerId+"&shotType="+shotType;
+	var query = "shotId="+shotId+"&eventCoordsX="+eventCoordsX+"&eventCoordsY="+eventCoordsY+"&playerId="+playerId+"&shotType="+shotType+"&teamId="+teamId+"&time="+time+"&player="+player+"&gameId="+gameId;
 
 	xhr.open("POST", url, true);
 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -257,18 +418,112 @@ document.getElementById('resptxt').innerHTML="AJAX!";
 
 }
 
-function showStats(e){
+function getInfoForm(event){
+	var target = event.target.getAttribute('id');
+	console.log('the target getInfoForm is: '+target);
+	var xhr = new XMLHttpRequest();
+	var url = 'getInfoForm.php?player='+target;
+	xhr.onreadystatechange =  function(){
+		if (xhr.readyState==4&&xhr.status==200) {
+			var response = (xhr.responseText);
+			response = response.split(',');
+			console.log('the whole part of this array is '+response)
+			$('#firstName').val(response[1]);
+			$('#lastName').val(response[6]);
+			$('#playerNumber').val(response[3]);
+			$('#playerNotes').val(response[4]);
+			$('#playerPosition').val(response[2]);
+			$('#playerId').val(response[0])
+
+
+
+
+		}
+	}
+	xhr.open("GET", url, true);
+	xhr.send();
+}
+
+function deletePlayer(event){
+	var target = event.target.getAttribute('id');
+	console.log('the target to be deleted is: '+target);
+	var xhr = new XMLHttpRequest();
+	var url = 'deletePlayer.php?id='+target+'&t='+Date();
+	xhr.onreadystatechange =  function(){
+			if (xhr.readyState==4&&xhr.status==200) {
+				var resp = xhr.responseText;
+				console.log(resp);
+				document.getElementById('resptxt').innerHTML = resp;
+				getHomeTeamList();
+				getVisitorTeamList();
+
+
+			};
+		}
+	xhr.open("GET", url, true);
+	xhr.send();
+}
+
+
+
+
+function mainStats(event){
 	
-	homeTeamList = window.document.getElementById('homeTeamList');
-		homeTeamList.addEventListener('click', showStats, false);
-		var target = e.target.getAttribute('id');
-		console.log('the target is: '+target);
-		$('#test').html(target);
+	// homeTeamList = window.document.getElementById('homeTeamList');
+		// homeTeamList.addEventListener('click', showStats, false);
+		var target = event.target.getAttribute('id');
+		var gameId=document.getElementById('gameId').innerHTML;
+		console.log('the target mainStat is: '+target);
 		var xhr = new XMLHttpRequest();
-		var url = 'getStats.php?player='+target;
+		var url = 'mainStats.php?player='+target+'&t='+Date()+'&gameId='+gameId;
 		xhr.onreadystatechange =  function(){
 				if (xhr.readyState==4&&xhr.status==200) {
-					document.getElementById('showStats').innerHTML = xhr.responseText;
+					var resp = xhr.responseText;
+					console.log(resp);
+					document.getElementById('mainStats').innerHTML = resp;
+							getHomeTeamEvents();
+
+				};
+			}
+		xhr.open("GET", url, true);
+		xhr.send();
+		getHomeTeamEvents();
+}
+
+function getStats(event){
+	
+	// homeTeamList = window.document.getElementById('homeTeamList');
+		// homeTeamList.addEventListener('click', showStats, false);
+		var target = event.target.getAttribute('id');
+		var gameId = document.getElementById('gameId').innerHTML;
+		console.log('the target is: '+target);
+		var xhr = new XMLHttpRequest();
+		var url = 'getStats.php?player='+target+'&gameId='+gameId;
+
+		xhr.onreadystatechange =  function(){
+				if (xhr.readyState==4&&xhr.status==200) {
+					document.getElementById('getStats').innerHTML = xhr.responseText;
+				};
+			}
+		xhr.open("GET", url, true);
+		xhr.send();
+}
+
+
+function getHomeTeamEvents(){
+	
+	// homeTeamList = window.document.getElementById('homeTeamList');
+		// homeTeamList.addEventListener('click', showStats, false);
+		var teamId = document.getElementById('teamId').value;
+		var gameId = document.getElementById('gameId').innerHTML;
+		console.log('the teamIdEvent is: '+teamId);
+		var xhr = new XMLHttpRequest();
+		var url = 'getHomeTeamEvents.php?teamId='+teamId+'&gameId='+gameId;
+
+		xhr.onreadystatechange =  function(){
+				if (xhr.readyState==4&&xhr.status==200) {
+					document.getElementById('homeTeamEvents').innerHTML = xhr.responseText;
+					console.log('gameId: '+gameId);
 				};
 			}
 		xhr.open("GET", url, true);
@@ -309,7 +564,7 @@ function showStats(e){
 		shotLocX.push(posx);
 		shotLocY.push(posy);
 		shotbox = window.document.getElementById('shotbox');
-		console.log('cancle was clicked');
+		console.log('made was clicked');
 		console.log('shotList array: '+shotList);
 		console.log('shotLocX array? '+shotLocX);
 		window.document.getElementById('eventCoordsX').value=posx;
@@ -320,51 +575,385 @@ function showStats(e){
 
 			shotbox.style.display = 'none';
 	}
-		function miss(){
-			 targetPlayer();
-		var icon = document.createElement("i");
-		var span = document.createElement("span");
-		icon.setAttribute('class', 'fi-x');
-		span.setAttribute('class', 'courtMarkers');
-		// miss.setAttribute('alt', 'Shot made');
-		// icon.setAttribute('height', '10');
-		// icon.setAttribute('width', '10');
-		shotbox = window.document.getElementById('shotbox');
-		posy = shotbox.style.top;
-		posy = posy.slice(0, -2);
-		posy = parseInt(posy);
-		posy = posy + 40;
-		posx = shotbox.style.left;
-		posx = posx.slice(0, -2);
-		posx = parseInt(posx);
-		posx = posx + 40;
 
-		icon.style.zIndex=20;
-		icon.style.color='red';
-		span.appendChild(icon);
-		document.body.appendChild(span);
-		shotList.push('miss');
-		shotLocX.push(posx);
-		shotLocY.push(posy);
-		icon.style.position = 'absolute';
-		icon.style.top = (posy)+'px';
-		icon.style.left = (posx)+'px';
-		span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-		shotbox = window.document.getElementById('shotbox');
-		console.log('X was clicked for a missed shot');
-		console.log('shotList Array: '+shotList);
-		console.log('shotLocX array: '+shotLocX);
-		window.document.getElementById('eventCoordsX').value=posx;
-		window.document.getElementById('eventCoordsY').value=posy;
-		console.log('shotLocY array: '+shotLocY);
+function travel(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-alert');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
 
-			shotbox.style.display = 'none';
-	}
-		function cancel(){
-		shotbox = window.document.getElementById('shotbox');
-		$eventCount--;
-		console.log('cancle was clicked');
-		console.log('shotList array: '+shotList);
+icon.style.zIndex=20;
+icon.style.color='yellow';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('travel');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Travel was clicked for a traveling call');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function block(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-pause');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='yellow';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('block');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Block was clicked for a Blocked Shot');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function assist(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-torsos');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#088da5';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('assist');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Nice pass for the Assist! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function steal(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-shuffle');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#a52008';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('steal');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Nice pass for the Assist! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function rebound(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-arrow-down');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#8da508';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('rebound');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Nice job for the Rebound! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function freethrow(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-marker');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#08a56f';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('freethrow');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('And one!! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function foul(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-skull');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#000000';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('foul');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Whack-a-shaq!! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+function three(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-css3');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='#a5088d';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('three');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('Three pointer from DOWNTOWN!!! ');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+
+
+
+
+
+function miss(){
+	 targetPlayer();
+var icon = document.createElement("i");
+var span = document.createElement("span");
+icon.setAttribute('class', 'fi-x');
+span.setAttribute('class', 'courtMarkers');
+// miss.setAttribute('alt', 'Shot made');
+// icon.setAttribute('height', '10');
+// icon.setAttribute('width', '10');
+shotbox = window.document.getElementById('shotbox');
+posy = shotbox.style.top;
+posy = posy.slice(0, -2);
+posy = parseInt(posy);
+posy = posy + 40;
+posx = shotbox.style.left;
+posx = posx.slice(0, -2);
+posx = parseInt(posx);
+posx = posx + 40;
+
+icon.style.zIndex=20;
+icon.style.color='red';
+span.appendChild(icon);
+document.body.appendChild(span);
+shotList.push('miss');
+shotLocX.push(posx);
+shotLocY.push(posy);
+icon.style.position = 'absolute';
+icon.style.top = (posy)+'px';
+icon.style.left = (posx)+'px';
+span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
+shotbox = window.document.getElementById('shotbox');
+console.log('X was clicked for a missed shot');
+console.log('shotList Array: '+shotList);
+console.log('shotLocX array: '+shotLocX);
+window.document.getElementById('eventCoordsX').value=posx;
+window.document.getElementById('eventCoordsY').value=posy;
+console.log('shotLocY array: '+shotLocY);
+
+	shotbox.style.display = 'none';
+}
+function cancel(){
+shotbox = window.document.getElementById('shotbox');
+$eventCount--;
+console.log('cancle was clicked');
+console.log('shotList array: '+shotList);
+console.log('eventCount array: '+$eventCount);
 
 
 			shotbox.style.display = 'none';
@@ -373,19 +962,22 @@ function showStats(e){
 function targetPlayer(){
 	alert("Select a Player");
 	function clickOnPlayer(e){
-		console.log('target player: '+e.target.innerHTML);
-		console.log("This is a: "+shotList[$eventCount]);
-		target = e.target.getAttribute('id');
+		console.log('target playerId: '+e.target.getAttribute('id'));
+		console.log('target player: '+e.target.getAttribute('name'));
+		console.log("This is a: "+shotList[$eventCount-1]);
+		playerId = e.target.getAttribute('id');
+		player = e.target.getAttribute('name');
 		window.document.getElementById('homeTeamList').removeEventListener('click', clickOnPlayer, false);
-		window.document.getElementById('visitorTeam').removeEventListener('click', clickOnPlayer, false);
-		window.document.getElementById('playerId').value = target;
+		window.document.getElementById('visitorTeamList').removeEventListener('click', clickOnPlayer, false);
+		window.document.getElementById('playerId').value = playerId;
+		window.document.getElementById('player').value = player;
 		$submitEvent=window.document.getElementById('submitEvent');
 		$submitEvent.click();
 	}
 	window.document.getElementById('homeTeamList').addEventListener('click', clickOnPlayer, false);
-	window.document.getElementById('visitorTeam').addEventListener('click', clickOnPlayer, false);
-	window.document.getElementById('visitorTeam').removeEventListener('click', showStats, false);
-	window.document.getElementById('homeTeamList').removeEventListener('click', showStats, false);
+	window.document.getElementById('visitorTeamList').addEventListener('click', clickOnPlayer, false);
+	window.document.getElementById('visitorTeamList').removeEventListener('click', getStats, false);
+	window.document.getElementById('homeTeamList').removeEventListener('click', getStats, false);
 console.log($eventCount +' event count from target player finction');
 }
 
@@ -394,8 +986,9 @@ $eventCount=0;
 	 court = window.document.getElementById('court');
 	function hi(e){
 		if (shotbox.style.display != 'block') {
+			getHomeTeamEvents();
 			$eventCount++;
-			console.log($eventCount);
+			console.log("This is event number "+$eventCount);
 			window.document.getElementById('shotId').value=$eventCount;
 		console.log('aloha');
 		var pX = window.innerWidth/5;//resize the popup
@@ -443,15 +1036,12 @@ fastForwardClockBtn=window.document.getElementById('fastForwardClockBtn');
 playClockBtn=window.document.getElementById('playClockBtn');
 stopClockBtn=window.document.getElementById('stopClockBtn');
 pauseClockBtn=window.document.getElementById('pauseClockBtn');
-rosterBtn=window.document.getElementById('rosterBtn');
 startGameBtn=window.document.getElementById('startGameBtn');
 
 
 	// document.addEventListener('mousemove', showCoords, false);		
 	court.addEventListener('click', hi, false);
-	startGameBtn.addEventListener('touch', getHomeTeamList, false);
-	rosterBtn.addEventListener('click', rosterForm, false);
-
+	// startGameBtn.addEventListener('click', getHomeTeamList, false);
 	  minusMinuteBtn.addEventListener('click', minusMinute, false);
 	  plusMinuteBtn.addEventListener('click', plusMinute, false);
 	  minusSecondBtn.addEventListener('click', minusSecond, false);
