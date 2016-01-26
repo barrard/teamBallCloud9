@@ -1,7 +1,7 @@
 <?php 
 include 'connection/session.php';
 include 'connection/database.php';
-$sql ="SELECT * FROM players WHERE teamId = $_SESSION[teamId]";
+$sql ="SELECT * FROM players WHERE teamId = $_SESSION[opponentId]";
 $rsd = mysqli_query($db, $sql)or trigger_error(mysqli_error($db)." in ".$sql);
 		$playerId=array();
 		$players=array();
@@ -37,12 +37,12 @@ while ($row = mysqli_fetch_array($rsd)) {
 	    		<i id=".$playerId[$x]." class='fi-power'></i></span></a>
 	    	<a onClick='deletePlayer(event)'id=".$playerId[$x]." href='#'><span id=".$playerId[$x]." class='alert badge playerIcons'>
 	    		<i id=".$playerId[$x]." class='fi-x'></i></span></a>
-	    		<br>";
-	    	// Starter: ".$starter[$x]."<br>
-	    	// playerId: ".$playerId[$x]."<br>
-	    	// Pos:".$position[$x]."<br>
+	    		<br>
+	    	Starter: ".$starter[$x]."<br>
+	    	playerId: ".$playerId[$x]."<br>
+	    	Pos:".$position[$x]."<br>
 	    	#: ".$playerNumber[$x]."<br>
-	    	echo "Points: <span id='mainStats'></span> 
+	    	 Points: <span id='mainStats'></span> 
 	    	</div>
 	    	</li>
 	      </ul>

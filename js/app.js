@@ -20,7 +20,7 @@ function getTeamInfo(val){
 
 function getGameHistory(){
 	var xhr = new XMLHttpRequest();
-	var homeId = document.getElementById('homeId').innerHTML;
+	var homeId = document.getElementById('teamId').innerHTML;
 	var visitorId = document.getElementById('opponentIdNumber').innerHTML;
 	var url = 'getGameHistory.php?homeTeamId='+homeId+'&visitorTeamId='+visitorId;
 
@@ -28,7 +28,7 @@ function getGameHistory(){
 		if (xhr.readyState==4&&xhr.status==200) {
 			response = xhr.responseText;
 			console.log(document.getElementById('opponentIdNumber').innerHTML);
-			console.log(document.getElementById('homeId').innerHTML);
+			console.log(document.getElementById('teamId').innerHTML);
 
 			document.getElementById('gameHistory').innerHTML = response;	
 			//$(document).foundation()
@@ -40,6 +40,28 @@ function getGameHistory(){
 
 }
 
+function getStatsFromDB(){
+	var teamId = document.getElementById('teamId').innerHTML;
+	var gameId = document.getElementById('gameId').innerHTML;
+	console.log('getStatsFromDB()');
+	var xhr = new XMLHttpRequest();
+	var url = 'getStatsFromDB.php?teamId='+teamId+'&gameId='+gameId;
+
+	xhr.onreadystatechange =  function(){
+			if (xhr.readyState==4&&xhr.status==200) {
+				console.log('success we got stats from DB');
+				document.getElementById('getStatsFromDB').innerHTML=xhr.responseText;
+				var scriptTags=homeTeamEvents.getElementsByTagName('getStatsFromDB');
+				for(var n=0;n<scriptTags.length;n++){
+					eval(scriptTags[n].innerHTML);
+				}
+				console.log(statsfromDB);
+				console.log('gameId: '+gameId);
+			};
+		}
+	xhr.open("GET", url, true);
+	xhr.send();
+}
 
 
 function sendRoster(){
@@ -53,7 +75,9 @@ function sendRoster(){
 	var playerNotes = document.getElementById('playerNotes').value;
 	var playerPosition = document.getElementById('playerPosition').value;
 	var starter = document.getElementById('starter').value;
-	var query="teamId="+teamIdTag+"&firstName="+firstName+"&lastName="+lastName+"&playerNumber="+playerNumber+"&playerNotes="+playerNotes+"&playerPosition="+playerPosition+"&starter="+starter;
+	var cacheControl = document.getElementById('cacheControl').value;
+
+	var query="teamId="+teamIdTag+"&firstName="+firstName+"&lastName="+lastName+"&playerNumber="+playerNumber+"&playerNotes="+playerNotes+"&playerPosition="+playerPosition+"&starter="+starter+"&cacheControl="+cacheControl;
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	// xhr.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
@@ -112,25 +136,11 @@ $('#firstName').val('');
 $('#lastName').val('');
 	}
 
-
-// function rosterForm(){
-// 	var xhr = new XMLHttpRequest();
-
-// 	xhr.onreadystatechange = function(){
-// 		if (xhr.status == 200) {
-// 			document.getElementById('innerForm').innerHTML = xhr.responseText;	
-// 		};
-// 	};
-
-// 	xhr.open('GET', 'rosterForm.php', true);
-// 	xhr.send(null);
-// }
-
 function getHomeTeamList(){
-	console.log("Im going to little beacg");
+	console.log("getHomeTeamList();");
 	var xhr = new XMLHttpRequest();
 	var url = 'getHomeTeam.php';
-	var teamId = document.getElementById('homeId').innerHTML;
+	var teamId = document.getElementById('teamId').innerHTML;
 	var visitorName = document.getElementById('opponentName').innerHTML;
 	console.log(teamId+' '+visitorName);
 	var query = "?teamId="+teamId;
@@ -145,9 +155,9 @@ function getHomeTeamList(){
 }
 
 function getVisitorTeamList(){
-	console.log("Im going to little beacg");
+	console.log("getVisitorTeamList();");
 	var xhr = new XMLHttpRequest();
-	var url = 'getVisitorTeamList.php';
+	var url = 'getVisitorTeam.php';
 	var opponentId = document.getElementById('opponentId').innerHTML;
 	var opponentName = document.getElementById('opponentName').innerHTML;
 	console.log('opponentId '+opponentId+' and opponentName '+opponentName);
@@ -168,7 +178,7 @@ function newGame(){
 	// this.event.preventDefault();
 	var xhr = new XMLHttpRequest();
 	var url = 'newGame.php';
-	var homeId = document.getElementById('homeId').innerHTML;
+	var homeId = document.getElementById('teamId').innerHTML;
 	var visitorId = document.getElementById('opponentIdNumber').innerHTML;
 	var dateString = document.getElementById('dateString').innerHTML;
 	var homeName = document.getElementById('homeName').innerHTML;
@@ -366,13 +376,14 @@ function sendStats(){
 	var xhr = new XMLHttpRequest();
 	var url = 'sendStats.php';
 	var time = document.getElementById('gameTime').innerHTML;
-	var teamId = document.getElementById('teamId').value;
-	var shotId = document.getElementById('shotId').value;
+	var teamId = document.getElementById('teamId').innerHTML;
+	var shotId = shotList.length;
+	// var shotId = document.getElementById('shotId').value;
 	var eventCoordsX = document.getElementById('eventCoordsX').value;
 	var eventCoordsY = document.getElementById('eventCoordsY').value;
 	var playerId = document.getElementById('playerId').value;
 	var gameId = document.getElementById('gameId').innerHTML;
-	var shotType = shotList[$eventCount-1];
+	var shotType = shotList[shotList.length-1];
 	if (shotType == 'miss') {
 		shotType = 0;
 	}else if(shotType == 'freethrow'){
@@ -401,7 +412,7 @@ function sendStats(){
 
 
 
-	console.log('SEND IT! '+shotList[$eventCount-1]);
+	//console.log('SEND IT! '+shotList[$eventCount-1]);
 	console.log('COUNT IT!! '+shotType);
 	var query = "shotId="+shotId+"&eventCoordsX="+eventCoordsX+"&eventCoordsY="+eventCoordsY+"&playerId="+playerId+"&shotType="+shotType+"&teamId="+teamId+"&time="+time+"&player="+player+"&gameId="+gameId;
 
@@ -491,7 +502,8 @@ function mainStats(event){
 }
 
 function getStats(event){
-	
+	console.log('getStats(event');
+
 	// homeTeamList = window.document.getElementById('homeTeamList');
 		// homeTeamList.addEventListener('click', showStats, false);
 		var target = event.target.getAttribute('id');
@@ -511,76 +523,43 @@ function getStats(event){
 
 
 function getHomeTeamEvents(){
-	
-	// homeTeamList = window.document.getElementById('homeTeamList');
-		// homeTeamList.addEventListener('click', showStats, false);
-		var teamId = document.getElementById('teamId').value;
-		var gameId = document.getElementById('gameId').innerHTML;
-		console.log('the teamIdEvent is: '+teamId);
-		var xhr = new XMLHttpRequest();
-		var url = 'getHomeTeamEvents.php?teamId='+teamId+'&gameId='+gameId;
+	var teamId = document.getElementById('teamId').innerHTML;
+	var gameId = document.getElementById('gameId').innerHTML;
+	console.log('getHomeTeamEvents()');
+	var xhr = new XMLHttpRequest();
+	var url = 'getHomeTeamEvents.php?teamId='+teamId+'&gameId='+gameId;
 
-		xhr.onreadystatechange =  function(){
-				if (xhr.readyState==4&&xhr.status==200) {
-					document.getElementById('homeTeamEvents').innerHTML = xhr.responseText;
-					console.log('gameId: '+gameId);
-				};
-			}
-		xhr.open("GET", url, true);
-		xhr.send();
+	xhr.onreadystatechange =  function(){
+			if (xhr.readyState==4&&xhr.status==200) {
+				var homeTeamEvents=document.getElementById('homeTeamEvents');
+				homeTeamEvents.innerHTML = xhr.responseText;
+				var scriptTags=homeTeamEvents.getElementsByTagName('script');
+				// for(var n=0;n<scriptTags.length;n++){
+				// 	eval(scriptTags[n].innerHTML);
+				// }
+				// console.log('gameId: '+gameId);
+			};
+		}
+	xhr.open("GET", url, true);
+	xhr.send();
 }
 
 
 	shotList = [];
 	shotLocX = [];
 	shotLocY = [];
-
-	function made(){
-		targetPlayer();
-
-		var icon = document.createElement("i");
-		icon.setAttribute('class', 'fi-check courtMarkers');
-		// icon.setAttribute('alt', 'Shot made');
-		// icon.setAttribute('height', '10px');
-		// icon.setAttribute('width', '10px');
-		shotbox = window.document.getElementById('shotbox');
-		posy = shotbox.style.top;
-		posy = posy.slice(0, -2);
-		posy = parseInt(posy);
-		posy = posy + 45;
-		posx = shotbox.style.left;
-		posx = posx.slice(0, -2);
-		posx = parseInt(posx);
-		posx = posx + 45;
-		icon.style.position = 'absolute';
-		icon.style.top = posy +'px'; 
-		icon.style.left = posx +'px';
-		icon.style.color = 'green';
-		console.log('the x xoord is: '+posx);
-		console.log('the y coord is: '+posy);
-		icon.style.zIndex=20;
-		document.body.appendChild(icon);
-		shotList.push('made');
-		shotLocX.push(posx);
-		shotLocY.push(posy);
-		shotbox = window.document.getElementById('shotbox');
-		console.log('made was clicked');
-		console.log('shotList array: '+shotList);
-		console.log('shotLocX array? '+shotLocX);
-		window.document.getElementById('eventCoordsX').value=posx;
-		window.document.getElementById('eventCoordsY').value=posy;
-
-		console.log('shotLocY array? '+shotLocY);
+	if (shotList.length==0) {
+		getStatsFromDB();
+	};
 
 
-			shotbox.style.display = 'none';
-	}
+////////////////////////////////////////////////////////
 
-function travel(){
+function $event(fi, color, message, type){
 	 targetPlayer();
 var icon = document.createElement("i");
 var span = document.createElement("span");
-icon.setAttribute('class', 'fi-alert');
+icon.setAttribute('class', fi);
 span.setAttribute('class', 'courtMarkers');
 // miss.setAttribute('alt', 'Shot made');
 // icon.setAttribute('height', '10');
@@ -596,10 +575,10 @@ posx = parseInt(posx);
 posx = posx + 40;
 
 icon.style.zIndex=20;
-icon.style.color='yellow';
+icon.style.color=color;
 span.appendChild(icon);
 document.body.appendChild(span);
-shotList.push('travel');
+shotList.push(type);
 shotLocX.push(posx);
 shotLocY.push(posy);
 icon.style.position = 'absolute';
@@ -607,353 +586,29 @@ icon.style.top = (posy)+'px';
 icon.style.left = (posx)+'px';
 span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
 shotbox = window.document.getElementById('shotbox');
-console.log('Travel was clicked for a traveling call');
-console.log('shotList Array: '+shotList);
+console.log(message);
 console.log('shotLocX array: '+shotLocX);
 window.document.getElementById('eventCoordsX').value=posx;
 window.document.getElementById('eventCoordsY').value=posy;
+//window.document.getElementById('shotType').value=type;
 console.log('shotLocY array: '+shotLocY);
 
 	shotbox.style.display = 'none';
 }
 
-function block(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-pause');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
+function pushShotList(type){
+	shotList.push(type);
+	console.log("pushShotList();");
 
-icon.style.zIndex=20;
-icon.style.color='yellow';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('block');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Block was clicked for a Blocked Shot');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
 }
 
-function assist(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-torsos');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
+/////////////////////////////////////////////////////////
+
+function cancle(){
 shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#088da5';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('assist');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Nice pass for the Assist! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-function steal(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-shuffle');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#a52008';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('steal');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Nice pass for the Assist! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-function rebound(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-arrow-down');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#8da508';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('rebound');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Nice job for the Rebound! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-function freethrow(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-marker');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#08a56f';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('freethrow');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('And one!! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-function foul(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-skull');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#000000';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('foul');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Whack-a-shaq!! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-function three(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-css3');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='#a5088d';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('three');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('Three pointer from DOWNTOWN!!! ');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-
-
-
-
-
-function miss(){
-	 targetPlayer();
-var icon = document.createElement("i");
-var span = document.createElement("span");
-icon.setAttribute('class', 'fi-x');
-span.setAttribute('class', 'courtMarkers');
-// miss.setAttribute('alt', 'Shot made');
-// icon.setAttribute('height', '10');
-// icon.setAttribute('width', '10');
-shotbox = window.document.getElementById('shotbox');
-posy = shotbox.style.top;
-posy = posy.slice(0, -2);
-posy = parseInt(posy);
-posy = posy + 40;
-posx = shotbox.style.left;
-posx = posx.slice(0, -2);
-posx = parseInt(posx);
-posx = posx + 40;
-
-icon.style.zIndex=20;
-icon.style.color='red';
-span.appendChild(icon);
-document.body.appendChild(span);
-shotList.push('miss');
-shotLocX.push(posx);
-shotLocY.push(posy);
-icon.style.position = 'absolute';
-icon.style.top = (posy)+'px';
-icon.style.left = (posx)+'px';
-span.style.textShadow = 18+'px'+18+'px'+18+'px'+'black';
-shotbox = window.document.getElementById('shotbox');
-console.log('X was clicked for a missed shot');
-console.log('shotList Array: '+shotList);
-console.log('shotLocX array: '+shotLocX);
-window.document.getElementById('eventCoordsX').value=posx;
-window.document.getElementById('eventCoordsY').value=posy;
-console.log('shotLocY array: '+shotLocY);
-
-	shotbox.style.display = 'none';
-}
-function cancel(){
-shotbox = window.document.getElementById('shotbox');
-$eventCount--;
 console.log('cancle was clicked');
 console.log('shotList array: '+shotList);
-console.log('eventCount array: '+$eventCount);
+// console.log('eventCount array: '+$eventCount);
 
 
 			shotbox.style.display = 'none';
@@ -962,9 +617,12 @@ console.log('eventCount array: '+$eventCount);
 function targetPlayer(){
 	alert("Select a Player");
 	function clickOnPlayer(e){
+		e.preventDefault()
+		// $eventCount++;
+
 		console.log('target playerId: '+e.target.getAttribute('id'));
 		console.log('target player: '+e.target.getAttribute('name'));
-		console.log("This is a: "+shotList[$eventCount-1]);
+		//console.log("This is a: "+shotList[$eventCount-1]);
 		playerId = e.target.getAttribute('id');
 		player = e.target.getAttribute('name');
 		window.document.getElementById('homeTeamList').removeEventListener('click', clickOnPlayer, false);
@@ -978,18 +636,18 @@ function targetPlayer(){
 	window.document.getElementById('visitorTeamList').addEventListener('click', clickOnPlayer, false);
 	window.document.getElementById('visitorTeamList').removeEventListener('click', getStats, false);
 	window.document.getElementById('homeTeamList').removeEventListener('click', getStats, false);
-console.log($eventCount +' event count from target player finction');
+//console.log($eventCount +' event count from target player finction');
 }
 
 //logs events, and initiates events records
-$eventCount=0;
+//var $eventCount=shotList.length-1;
 	 court = window.document.getElementById('court');
 	function hi(e){
 		if (shotbox.style.display != 'block') {
 			getHomeTeamEvents();
-			$eventCount++;
-			console.log("This is event number "+$eventCount);
-			window.document.getElementById('shotId').value=$eventCount;
+			//console.log("This is event number before "+$eventCount);
+			//console.log("This is event number after "+$eventCount);
+
 		console.log('aloha');
 		var pX = window.innerWidth/5;//resize the popup
 		var pY = window.innerWidth/5;//resize the popup
@@ -1007,26 +665,6 @@ $eventCount=0;
 	}
 
 
-
-// function showCoords(e) {
-//     var cX = e.clientX;
-//     var sX = e.screenX;
-//     var pX = e.pageX;
-//     var pY = e.pageY;
-//     var lX = e.layerX;
-//     var lY = e.layerY;
-//     var cY = e.clientY;
-//     var sY = e.screenY;
-//     var ox = e.offsetX;//set location of popup
-// 	var oy = e.offsetY;//set location of popup
-
-//     var coords1 = "cX: " + cX + "<br> Y c:" + cY;
-//     var coords0 = "oX: " + ox + "<br> Y o:" + oy;
-//     var coords2 = "screen - X: " + sX + ", Y s: " + sY;
-//     var coords3 = "page - X: " + pX + ", Y p: " + pY;
-//     var coords4 = "layer - X: " + lX + ", l p: " + lY;
-//     document.getElementById("demo").innerHTML = coords1 + "<br>" + coords2+ "<br>" +coords3 + "<br>" + coords4 + "<br>" + coords0;
-// }
 minusMinuteBtn=window.document.getElementById('minusMinuteBtn');
 plusMinuteBtn=window.document.getElementById('plusMinuteBtn');
 minusSecondBtn=window.document.getElementById('minusSecondBtn');

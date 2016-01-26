@@ -26,13 +26,19 @@ h1, h2, h3, h4, h5, h6{
 	position: absolute;
 	bottom:0;
 }
-#homeTeam{
+#homeTeamlist{
 	-webkit-user-select: none;  /* Chrome all / Safari all */
 	-moz-user-select: none;     /* Firefox all */
 	-ms-user-select: none;      /* IE 10+ */
 	user-select: none;          /* Likely future */ 
 	padding-top: -20px;
 	margin-top:-10px;
+	height:500px;
+	overflow: scroll;
+}
+#homeList{
+	height:500px;
+	overflow: scroll;
 }
 #visitorTeam{
 	-webkit-user-select: none;  /* Chrome all / Safari all */
@@ -183,6 +189,10 @@ text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9);
 }
 
 #homeTeamEvents::-webkit-scrollbar { 
+  /* This is the magic bit */
+  display: none;
+}
+#homeList::-webkit-scrollbar { 
   /* This is the magic bit */
   display: none;
 }

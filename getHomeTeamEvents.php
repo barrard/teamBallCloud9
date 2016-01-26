@@ -10,50 +10,56 @@ $sql = "SELECT * FROM playerStats where teamId ='$teamId' and gameId='$gameId' o
 //echo $sql;
 $rsd = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
 
+
+
 $output = '';
 $shotType = '';
 $time = '';
 $playerId='';
 $class='';
+
 	while ($row = mysqli_fetch_assoc($rsd)) {
+
 		$playerId = $row['playerId'];
 		$player = $row['player'];
 		$shotType = $row['shotType'];
 		$time = $row['time'];
+		$posX = $row['eventCoordsX'];
+		$posY = $row['eventCoordsY'];
 
 
 		if($shotType==0){
-			$shotType="Miss ";
+			$shotType="Miss";
 			$class='alert';
 		}elseif($shotType==1){
-			$shotType="freethrow ";
+			$shotType="freethrow";
 			$class='success';
 		}elseif($shotType==2){
-			$shotType="Make ";
+			$shotType="Make";
 			$class='success';
 		}elseif($shotType==3){
-			$shotType="Three ";
+			$shotType="Three";
 			$class='success';
 		}elseif($shotType==4){
-			$shotType="blocked shot ";
+			$shotType="blocked-shot";
 			$class='primary'; 
 		}elseif($shotType==5){
-			$shotType="steal ";
+			$shotType="steal";
 			$class='alert';
 		}elseif($shotType==6){
-			$shotType="assist ";
+			$shotType="assist";
 			$class='primary';
 		}elseif($shotType==7){
-			$shotType="rebound ";
+			$shotType="rebound";
 			$class='primary';
 		}elseif($shotType==8){
-			$shotType="Turnover just happened ";
+			$shotType="Turnover";
 			$class='secondary';
 		}elseif($shotType==9){
-			$shotType="Foul Violation ";
+			$shotType="Foul";
 			$class='secondary';
 		}elseif($shotType==10){
-			$shotType="Travel violation ";
+			$shotType="Travel";
 			$class='alert';
 		}else{
 			$shotType="Miss";
@@ -65,3 +71,14 @@ $class='';
 		$output = "<div class='panel callout eventList ".$class."'>".$shotType."  by  ".$player."  @  ".$time."</div>";
 		echo $output;
 	}
+	//print_r($eventType);
+	
+	// foreach($eventType as $key => $value){
+	// 	echo "<script>shotList.push('".$value."');</script>";
+	// }
+	// foreach($posXarray as $key => $value){
+	// 	echo "<script>shotLocX.push('".$value."');</script>";
+	// }
+	// foreach($posYarray as $key => $value){
+	// 	echo "<script>shotLocY.push('".$value."');</script>";
+	// }

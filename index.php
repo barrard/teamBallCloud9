@@ -4,8 +4,10 @@
 	if ($_GET['page']=='logout') {	
 		include 'logout.php';
 } }?>
-<div class='hide'>
+<div class=''>
+  <div id='getStatsFromDB'></div>
 <?php echo 'teamName =  <span id="teamName">'.$_SESSION['teamName'].'</span><br>'; ?>
+<?php echo 'teamId =  <span id="teamId">'.$_SESSION['teamId'].'</span><br>'; ?>
 <?php echo 'opponentName = <span id="opponentName">'.$_SESSION['opponentName'].'</span><br>'; ?>
 <?php echo 'opponentId =  <span id="opponentId">'.$_SESSION['opponentId'].'</span><br>'; ?>
 <?php echo 'gameId =  <span id="gameId">'.$_SESSION['gameId'].'</span><br>'; ?>

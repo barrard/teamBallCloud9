@@ -1,9 +1,11 @@
 <div class='row'>
 	<!-- AJAX and PHP generated homeTeamList -->
 	<div class="columns small-2">
+		<div id='homeList'>
 	 <ul id='homeTeamList' class='vertical menu' data-accordion-menu data-multi-open='false'>
 
 	 </ul>
+	 </div>
 	 </div>
 	<div class="small-8 columns">
 		<img id="court" src="img/BasketballCourt.png" alt="">
@@ -23,28 +25,28 @@ hi
     	<div class="row">
     	<!-- Made shot button  #2 -->
     	<div class="columns small-12">
-		<button onclick='made()'><span name='shotMade'class='shotboxBtn badge success'><i class='fi-check'></i></span></button>
+		<button onclick='$event("fi-check", "green", "made was clicked event FUNCTION", "made")'><span name='shotMade'class='shotboxBtn badge success'><i class='fi-check'></i></span></button>
 		<!-- missed shot button  #0 -->
-		<button onclick='miss()'><span name='shotMiss'class='shotboxBtn badge alert'><i class='fi-x'></i></span></button>
+		<button onclick='$event("fi-x", "red", "X was clicked for a missed shot", "miss")'><span name='shotMiss'class='shotboxBtn badge alert'><i class='fi-x'></i></span></button>
 		<!-- cancle button #-->
-		<button onclick='cancel()'><span id='cancle'class='shotboxBtn badge secondary'><i class='fi-loop'></i></span></button>
+		<button onclick='cancle()'><span id='cancle'class='shotboxBtn badge secondary'><i class='fi-loop'></i></span></button>
 		<!-- Traveling button #10-->
-		<span onclick='travel()' id=''class='shotboxBtn badge warning'><i id=''class='fi-alert'></i></span>
+		<span onclick='$event("fi-alert", "yellow", "Travel was clicked for a traveling call", "travel")' id=''class='shotboxBtn badge warning'><i id=''class='fi-alert'></i></span>
 		<!-- Shot Block #4-->
-		<span onclick='block()'id=''class='shotboxBtn badge warning'><i id=''class='fi-pause'></i></span>
+		<span onclick='$event("fi-pause", "yellow", "Block was clicked for a Blocked Shot", "block")'id=''class='shotboxBtn badge warning'><i id=''class='fi-pause'></i></span>
 		<!-- assists button #6 -->
-		<span onclick='assist()'id=''class='shotboxBtn badge'><i id=''class='fi-torsos'></i></span>	
+		<span onclick='$event("fi-torsos", "#088da5", "Nice pass for the Assist! ", "assist")'id=''class='shotboxBtn badge'><i id=''class='fi-torsos'></i></span>	
 		<!-- turnover #8 -->
-		<span onclick='rebound()'id=''class='shotboxBtn badge warning'><i id=''class='fi-arrow-down'></i></span>
+		<span onclick='$event("fi-down", "#ff3300", "TURNOVER!! ", "turnover")'id=''class='shotboxBtn badge warning'><i id=''class='fi-arrow-down'></i></span>
 		<!-- foul #9-->
-		<span onclick='foul()'id=''class='shotboxBtn badge warning'><i id=''class='fi-skull'></i></span>
+		<span onclick='$event("fi-check", "green", "made was clicked event FUNCTION", "made")'id=''class='shotboxBtn badge warning'><i id=''class='fi-skull'></i></span>
 
 		<!-- freethrow #1 -->
-		<span onclick='freethrow()'id=''class='shotboxBtn badge'><i id=''class='fi-marker'></i></span>
+		<span onclick='$event("fi-marker", "#08a56f", "And one!! ", "freethrow")'id=''class='shotboxBtn badge'><i id=''class='fi-marker'></i></span>
 		<!-- steal #5 -->
-		<span onclick='steal()'id=''class='alert shotboxBtn badge'><i id=''class='fi-shuffle'></i></span>
+		<span onclick='$event("fi-shuffle", "#a52008", "Like taking candy from a baby! ", "steal")'id=''class='alert shotboxBtn badge'><i id=''class='fi-shuffle'></i></span>
 		<!-- three pointer #3 -->
-		<span onclick='three()'id=''class='shotboxBtn badge'><i id=''class='fi-css3'></i></span>
+		<span onclick='$event("fi-css3", "#a5088d", "Three pointer from DOWNTOWN!!! ", "three")'id=''class='shotboxBtn badge'><i id=''class='fi-css3'></i></span>
 		</div>
 		</div>
 	</div>
@@ -110,20 +112,20 @@ hi
 	</div>
 	
  <?php
- include 'connection/database.php';
-global $db;
-$sql = "SELECT * FROM teams WHERE teamName = '$_SESSION[teamName]'";
-$rsd = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
-while($row = mysqli_fetch_assoc($rsd)) { 
-$teamId=$row['teamId'];
- } ?>
+//  include 'connection/database.php';
+// global $db;
+// $sql = "SELECT * FROM teams WHERE teamName = '$_SESSION[teamName]'";
+// $rsd = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
+// while($row = mysqli_fetch_assoc($rsd)) { 
+// $teamId=$row['teamId'];
+//  } ?>
 
-		<input id='shotId'type="hidden" name='shotId' value=''>
-		<input id='eventCoordsX'type="hidden" name='eventCoordsX' value=''>
-		<input id='eventCoordsY'type="hidden" name='eventCoordsY' value=''>
-		<input id='playerId'type="hidden" name='playerId' value=''>
-		<input id='player'type="hidden" name='player' value=''>
-		<input id='teamId' type="text" name='teamId' value='<?php echo $teamId; ?>'>
+		<input id='shotId'type="text" name='shotId' value=''>
+		<input id='eventCoordsX'type="text" name='eventCoordsX' value=''>
+		<input id='eventCoordsY'type="text" name='eventCoordsY' value=''>
+		<input id='playerId'type="text" name='playerId' value=''>
+		<input id='player'type="text" name='player' value=''>
+		<!--<input id='teamId' type="hidden" name='teamId' value='<?php //echo $_SESSION['teamId']; ?>'>-->
 
 		<button class='hidden'onClick='javascript:sendStats();'id='submitEvent'name='eventSubmit'>Submit</button>
 
@@ -133,9 +135,9 @@ $teamId=$row['teamId'];
   <div>
     <a href="#close" title="Close" class="close">X</a>
 
-  <form action=""method='post'>
-
- <input type="text" name='teamId' id='teamIdTag' value="<?php echo $teamId; ?>">
+  <form action=""method=''>
+<input type="text" id='cacheControl' value='<?php echo Date('Y m/d h:i a'); ?>' >
+ <input type="text" name='teamId' id='teamIdTag' value="<?php echo $_SESSION['teamId']; ?>">
   <div class="row">
      <div class="medium-5 columns">
        <label>First Name
@@ -150,7 +152,7 @@ $teamId=$row['teamId'];
      <div class="medium-2 columns">
       <label>
         Player #
-        <input type="number" name='playerNumber'id='playerNumber'value="100">
+        <input type="number" name='playerNumber'id='playerNumber'value="10">
       </label>
      </div>
    </div>
@@ -188,5 +190,4 @@ $teamId=$row['teamId'];
 </div>
 
 
- 
 
