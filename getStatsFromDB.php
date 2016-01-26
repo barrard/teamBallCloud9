@@ -26,55 +26,49 @@ $posYarray=array();
 		$posY = $row['eventCoordsY'];
 
 
-		// if($shotType==0){
-		// 	$shotType="Miss";
-		// 	$class='alert';
-		// }elseif($shotType==1){
-		// 	$shotType="freethrow";
-		// 	$class='success';
-		// }elseif($shotType==2){
-		// 	$shotType="Make";
-		// 	$class='success';
-		// }elseif($shotType==3){
-		// 	$shotType="Three";
-		// 	$class='success';
-		// }elseif($shotType==4){
-		// 	$shotType="blocked-shot";
-		// 	$class='primary'; 
-		// }elseif($shotType==5){
-		// 	$shotType="steal";
-		// 	$class='alert';
-		// }elseif($shotType==6){
-		// 	$shotType="assist";
-		// 	$class='primary';
-		// }elseif($shotType==7){
-		// 	$shotType="rebound";
-		// 	$class='primary';
-		// }elseif($shotType==8){
-		// 	$shotType="Turnover";
-		// 	$class='secondary';
-		// }elseif($shotType==9){
-		// 	$shotType="Foul";
-		// 	$class='secondary';
-		// }elseif($shotType==10){
-		// 	$shotType="Travel";
-		// 	$class='alert';
-		// }else{
-		// 	$shotType="Miss";
-		// 	$class='Alert';
-		// }
+		if($shotType==0){
+			$shotType="Miss";
+			$class='alert';
+		}elseif($shotType==1){
+			$shotType="freethrow";
+			$class='success';
+		}elseif($shotType==2){
+			$shotType="Make";
+			$class='success';
+		}elseif($shotType==3){
+			$shotType="Three";
+			$class='success';
+		}elseif($shotType==4){
+			$shotType="blocked-shot";
+			$class='primary'; 
+		}elseif($shotType==5){
+			$shotType="steal";
+			$class='alert';
+		}elseif($shotType==6){
+			$shotType="assist";
+			$class='primary';
+		}elseif($shotType==7){
+			$shotType="rebound";
+			$class='primary';
+		}elseif($shotType==8){
+			$shotType="Turnover";
+			$class='secondary';
+		}elseif($shotType==9){
+			$shotType="Foul";
+			$class='secondary';
+		}elseif($shotType==10){
+			$shotType="Travel";
+			$class='alert';
+		}else{
+			$shotType="Miss";
+			$class='Alert';
+		}
 
 		array_push($eventType, $shotType);
 		array_unshift($posXarray, $posX);
 		array_unshift($posYarray, $posY);
-	}
-		foreach($eventType as $key => $value){
-		echo "<script>shotList[".$key."]='".$value."';</script>";
-		echo "<script>console.log('".$value."');</script>";
-
-	}
-		echo"<pre>";
-		print_r($eventType);
-		echo"</pre>";
 	
-		echo"<script>var statsfromDB = ".json_encode($eventType)."</script>";
+		echo"<script> shotList.push('".$shotType."');</script>";
+		echo"<script> shotLocX.push('".$posX."');</script>";
+		echo"<script> shotLocY.push('".$posY."');</script>";
+		echo"<script> console.log('hellloooo!!!!!');</script>";}

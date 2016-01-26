@@ -17,7 +17,9 @@ $shotType = '';
 $time = '';
 $playerId='';
 $class='';
-
+$eventType=array();
+$posXarray=array();
+$posYarray=array();
 	while ($row = mysqli_fetch_assoc($rsd)) {
 
 		$playerId = $row['playerId'];
@@ -70,9 +72,22 @@ $class='';
 
 		$output = "<div class='panel callout eventList ".$class."'>".$shotType."  by  ".$player."  @  ".$time."</div>";
 		echo $output;
+
+		array_push($eventType, $shotType);
+		array_push($posXarray, $posX);
+		array_push($posYarray, $posY);
+
+
 	}
-	//print_r($eventType);
-	
+	// echo '<pre>';
+	// print_r($eventType);
+	//echo json_encode($eventType);
+	// print_r($posXarray);
+	// print_r($posYarray);
+	// echo '</pre>';
+	?>
+
+	<?php
 	// foreach($eventType as $key => $value){
 	// 	echo "<script>shotList.push('".$value."');</script>";
 	// }

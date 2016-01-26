@@ -51,12 +51,12 @@ function getStatsFromDB(){
 			if (xhr.readyState==4&&xhr.status==200) {
 				console.log('success we got stats from DB');
 				document.getElementById('getStatsFromDB').innerHTML=xhr.responseText;
-				var scriptTags=homeTeamEvents.getElementsByTagName('getStatsFromDB');
+				var scriptTags=document.getElementById('getStatsFromDB').getElementsByTagName('script');
 				for(var n=0;n<scriptTags.length;n++){
 					eval(scriptTags[n].innerHTML);
 				}
-				console.log(statsfromDB);
-				console.log('gameId: '+gameId);
+				//console.log(statsfromDB);
+				//console.log('gameId: '+gameId);
 			};
 		}
 	xhr.open("GET", url, true);
@@ -533,11 +533,7 @@ function getHomeTeamEvents(){
 			if (xhr.readyState==4&&xhr.status==200) {
 				var homeTeamEvents=document.getElementById('homeTeamEvents');
 				homeTeamEvents.innerHTML = xhr.responseText;
-				var scriptTags=homeTeamEvents.getElementsByTagName('script');
-				// for(var n=0;n<scriptTags.length;n++){
-				// 	eval(scriptTags[n].innerHTML);
-				// }
-				// console.log('gameId: '+gameId);
+				
 			};
 		}
 	xhr.open("GET", url, true);
