@@ -14,7 +14,7 @@
           <li><a href="#">3</a></li>
         </ul>
       </li>
-      <li>
+      <li> startGame = <?php echo $startGame; ?>
       </li>
       <?php if (!$loggedin) { ?>
         
@@ -36,12 +36,12 @@
 <span class="secondary badge"><i class="fi-power"></i></span></a>
         <ul class="submenu menu vertical" data-submenu>
 
-          <li><a href="#">One</a></li>
+          <li><a onclick='quitGame();'href="#matchUp">MatchUp!</a></li>
           <li><a href="#">Two</a></li>
           <li><a href="#">three</a></li>
         </ul>
       </li>
-      <li>
+      <li> startGame = <?php echo $startGame; ?>
       </li>
       <li><a href="#openModal">Add Player to the Roster</a></li>
     <li>
@@ -52,7 +52,7 @@
 
 <?php } ?>
     <div class="top-bar-right">
-      <div id='resptxt'>resptxt</div>
+      <div id='resptxt'></div>
   <?php if ($loggedin) { ?>
        <div id='NEWTEST'></div>
     <div class="alert button full"> 

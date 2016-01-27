@@ -125,6 +125,8 @@ hi
 		<input id='eventCoordsY'type="text" name='eventCoordsY' value=''>
 		<input id='playerId'type="text" name='playerId' value=''>
 		<input id='player'type="text" name='player' value=''>
+		<input id='foundIcon'type="text" name='foundIcon' value=''>
+		<input id='iconColor'type="text" name='iconColor' value=''>
 		<!--<input id='teamId' type="hidden" name='teamId' value='<?php //echo $_SESSION['teamId']; ?>'>-->
 
 		<button class='hidden'onClick='javascript:sendStats();'id='submitEvent'name='eventSubmit'>Submit</button>

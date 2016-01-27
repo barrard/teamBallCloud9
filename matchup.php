@@ -17,7 +17,7 @@ $rsd = mysqli_query($db, $sql);
 <div class="row">
 	<div class="columns small-4">
 		<form autocomplete="off" action=""method='post'>
-			<input type="text" disabled value='<?php echo $teamName ?>'>
+			<input type="text" disabled value='<?php echo $_SESSION['teamName'] ?>'>
 		<div class="row">
 			<div class="collumns small-12">
 				<h2>VS.</h2>

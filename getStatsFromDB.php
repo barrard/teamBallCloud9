@@ -13,6 +13,8 @@ $rsd = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
 
 $shotType='';
 $class='';
+$foundIcon='';
+$iconColor='';
 $eventType=array();
 $posXarray=array();
 $posYarray=array();
@@ -24,6 +26,8 @@ $posYarray=array();
 		$time = $row['time'];
 		$posX = $row['eventCoordsX'];
 		$posY = $row['eventCoordsY'];
+		$foundIcon = $row['foundIcon'];
+		$iconColor = $row['iconColor'];
 
 
 		if($shotType==0){
@@ -71,4 +75,9 @@ $posYarray=array();
 		echo"<script> shotList.push('".$shotType."');</script>";
 		echo"<script> shotLocX.push('".$posX."');</script>";
 		echo"<script> shotLocY.push('".$posY."');</script>";
-		echo"<script> console.log('hellloooo!!!!!');</script>";}
+		echo"<script> foundIcon.push('".$foundIcon."');</script>";
+		echo"<script> iconColor.push('".$iconColor."');</script>";
+		echo"<script> console.log('hellloooo!!!!!');</script>";
+	}
+
+		echo"<script> populateCourt(shotList, shotLocX, shotLocY, foundIcon, iconColor);</script>";

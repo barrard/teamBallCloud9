@@ -22,7 +22,7 @@ if ((!empty($_GET['homeTeamId']))&&(!empty($_GET['visitorTeamName']))){
 	$_SESSION['gameId'] = mysqli_insert_id($db);
 	$_SESSION['opponentName'] = $visitorTeamName;
 	$_SESSION['opponentId'] = $visitorTeamId;
-	$startGame = true;
+	//$startGame = true;
 	// echo $startGame;
 	 }?>
 

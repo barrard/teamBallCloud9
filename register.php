@@ -1,5 +1,5 @@
 <?php 
-
+session_start();
 $teamName='';
 $password='';
 if (!empty($_POST['register'])) {
@@ -16,8 +16,9 @@ if (!empty($_POST['register'])) {
 			$query = "INSERT INTO teams (teamName, password) VALUES ('$teamName', '$password')";
 			mysqli_query($db, $query) or trigger_error(mysqli_error($db)." in ".$query);
 			$loggedin = true;
-			$teamName=$_SESSION['teamName'];
-			header('Location: http://localhost/ballshotAJAX/?page=login');
+			$_SESSION['teamId'] = mysqli_insert_id($db);
+			$_SESSION['teamName']=$teamName;
+			header('Location: http://localhost/ballshotAJAX/');
 		}else
 			// echo $rsd;
 			echo("The username <i>'$teamName'</i> already exists '<a href='?page=register'>&larr; Back</a>");

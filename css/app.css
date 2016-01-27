@@ -228,5 +228,20 @@ text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.9);
 	overflow: scroll;
 
 }
+.gameBtns{
+	padding-left:10px;
+}
+
+.pad-left{
+	padding-left: 50px;
+}
+#gameBtns{
+	position:absolute;
+		top:0px;
+		 left: 1px;
+}
+.relative{
+	position:relative;
+}
 
 

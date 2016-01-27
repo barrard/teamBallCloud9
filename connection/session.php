@@ -1,13 +1,17 @@
 <?php 
- $_SESSION['teamName'] = '';
+session_start();
 $loggedin = '';
 $startGame = '';
-session_start();
+
  if (!empty($_SESSION['teamName'])) {
  	 $loggedin = true;
 
-} 
+} else {
+	$loggedin = false;
+}
  if (!empty($_SESSION['opponentName'])) {
  	 $startGame = true;
 
-} ?>
+} else {
+	$startGame = false;
+}?>

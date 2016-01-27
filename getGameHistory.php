@@ -6,7 +6,7 @@ if ((!empty($_GET['homeTeamId'])) &&(!empty($_GET['visitorTeamId']))) {
 	$sql ="SELECT * FROM game WHERE 
 	(homeTeamId='$_GET[homeTeamId]' OR homeTeamId='$_GET[visitorTeamId]')
 	AND 
-	(visitorTeamId='$_GET[homeTeamId]' OR visitorTeamId='$_GET[visitorTeamId]')";
+	(visitorTeamId='$_GET[homeTeamId]' OR visitorTeamId='$_GET[visitorTeamId]') order by id DESC";
 // $sql ="SELECT * FROM game WHERE homeTeamId and visitorTeamId ='$_GET[homeTeamId]' xor '$_GET[visitorTeamId]'";
 $rsd = mysqli_query($db, $sql)or trigger_error(mysqli_error($db)." in ".$sql);
 if (mysqli_num_rows($rsd)==0) {
@@ -17,10 +17,11 @@ if (mysqli_num_rows($rsd)==0) {
 ?>
 
 <h2>Game History</h2>
-
+<div class="row">
+	<div class="column small-12">
 <table border="1" cellpadding="3" cellspacing="3">
 	<tr>
-		<th width="120">homeTeamName</th>
+		<th width="120"><h4>homeTeamName</h4></th>
 		<th width="120">visitorTeamName</th>
 		<th width="120">visitorTeamId</th>
 		<th width="120">homeTeamId</th>
@@ -34,27 +35,34 @@ if (mysqli_num_rows($rsd)==0) {
 
 <?php 
 while ($row = mysqli_fetch_array($rsd)) {
-$homeTeamName = $row['homeTeamName'];
-$visitorTeamName = $row['visitorTeamName'];
-$homeTeamId = $row['homeTeamId'];
-$visitorTeamId = $row['visitorTeamId'];
-$homeTeamScore = $row['homeTeamScore'];
-$visitorTeamScore = $row['visitorTeamScore'];
-if (isset($row['dateString'])) {
-	$date = $row['dateString'];	
-}else{
-	$date = 'no date';
 
-}
+	      $gameId = $row['id'];
+    $homeTeamName = $row['homeTeamName'];
+ $visitorTeamName = $row['visitorTeamName'];
+      $homeTeamId = $row['homeTeamId'];
+   $visitorTeamId = $row['visitorTeamId'];
+   $homeTeamScore = $row['homeTeamScore'];
+$visitorTeamScore = $row['visitorTeamScore'];
+            $date = $row['dateString'];	
+
 ?>
 	 <tr>
-	 	<td><?php echo $homeTeamName; ?></td>
-	 	<td><?php echo $visitorTeamName; ?></td>
-	 	<td><?php echo $visitorTeamId; ?></td>
-	 	<td><?php echo $homeTeamId; ?></td>
-	 	<td><?php echo $visitorTeamScore; ?></td>
-	 	<td><?php echo $homeTeamScore; ?></td>
-	 	<td><?php echo $date; ?></td>
+	 
+	   <?php echo"<td class='relative'><div id='gameBtns'>
+	   		<a class='gameBtns' onClick='resumeGame(event);'id=".$gameId." href='#'><span id=".$gameId." class='badge'>
+	    		<i id=".$gameId." class='fi-power'></i></span></a>
+	    	<a class='gameBtns'onClick='getInfoForm(event)'id=".$gameId." href='#infoFormModal'><span id=".$gameId." class='warning badge'>
+	    		<i id=".$gameId." class='fi-power'></i></span></a>
+	    	<a class='gameBtns'onClick='deletePlayer(event)'id=".$gameId." href='#'><span id=".$gameId." class='alert badge'>
+	    		<i id=".$gameId." class='fi-x'></i></span></a>
+	    		</div>"; ?>
+	    		<?php echo $homeTeamName; ?></td>
+	 	<td class="pad-left"><?php echo $visitorTeamName; ?></td>
+	 	<td class="pad-left"><?php echo $visitorTeamId; ?></td>
+	 	<td class="pad-left"><?php echo $homeTeamId; ?></td>
+	 	<td class="pad-left"><?php echo $visitorTeamScore; ?></td>
+	 	<td class="pad-left"><?php echo $homeTeamScore; ?></td>
+	 	<td class="pad-left"><?php echo $date; ?></td>
 	 </tr>
 
 <?php
@@ -62,3 +70,5 @@ if (isset($row['dateString'])) {
 ?>
 
 </table>
+	</div>
+</div>
