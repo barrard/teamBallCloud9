@@ -1,15 +1,20 @@
 <?php
-$db = new mysqli("localhost", "root", "portland", "TeamBall");
-if ($db->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-}
-// echo $mysqli->host_info . "\n";
+    // A simple PHP script demonstrating how to connect to MySQL.
+    // Press the 'Run' button on the top to start the web server,
+    // then click the URL that is emitted to the Output tab of the console.
 
-$db = new mysqli("127.0.0.1", "root", "portland", "TeamBall", 3306);
-if ($db->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-}
+    $servername = getenv('IP');
+    $username = getenv('C9_USER');
+    $password = "";
+    $database = "c9";
+    $dbport = 3306;
 
-// echo $mysqli->host_info . "\n";
+    // Create connection
+    $db = new mysqli($servername, $username, $password, $database, $dbport);
+
+    // Check connection
+    if ($db->connect_error) {
+        die("Connection failed: " . $db->connect_error);
+    } 
+    echo "Connected successfully (".$db->host_info.")";
 ?>
-

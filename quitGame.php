@@ -23,7 +23,7 @@ session_start();
 	 $_SESSION['opponentName'] = '';
 	 $_SESSION['opponentId'] = '';
  	//session_destroy();
- 	header('Location: http://localhost/ballshotAJAX/index.php');
+ 	header('Location: https://ballshotajax-barrard.c9users.io');
 
 	//$startGame = false;
 	// echo $startGame;

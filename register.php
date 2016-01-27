@@ -18,7 +18,7 @@ if (!empty($_POST['register'])) {
 			$loggedin = true;
 			$_SESSION['teamId'] = mysqli_insert_id($db);
 			$_SESSION['teamName']=$teamName;
-			header('Location: http://localhost/ballshotAJAX/');
+			header('Location: https://ballshotajax-barrard.c9users.io');
 		}else
 			// echo $rsd;
 			echo("The username <i>'$teamName'</i> already exists '<a href='?page=register'>&larr; Back</a>");

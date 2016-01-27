@@ -17,7 +17,7 @@
 	        $_SESSION['teamId']= $row['teamId'];
 		  }
 
-	header('Location: http://localhost/ballshotAJAX/');
+	header('Location: https://ballshotajax-barrard.c9users.io');
 	 }}}?>
 
 

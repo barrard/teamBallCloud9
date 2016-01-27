@@ -10,7 +10,7 @@
  	 $_SESSION['opponentName'] = '';
  	session_destroy();
 
-		header('Location: http://localhost/ballshotAJAX/index.php');
+		header('Location: https://ballshotajax-barrard.c9users.io');
 
 //}
  ?>

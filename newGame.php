@@ -1,9 +1,6 @@
 <?php 
 session_start();
-$db = new mysqli("localhost", "root", "portland", "TeamBall");
-if ($db->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-}
+include('connection/database.php');
 
 
 if ((!empty($_GET['homeTeamId']))&&(!empty($_GET['visitorTeamName']))){

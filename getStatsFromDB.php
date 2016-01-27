@@ -1,9 +1,5 @@
 <?php 
-
-$db = new mysqli("localhost", "root", "portland", "TeamBall");
-if ($db->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
-}
+include('connection/database.php');
 $teamId = $_GET['teamId'];
 $gameId = $_GET['gameId'];
 $sql = "SELECT * FROM playerStats where teamId ='$teamId' and gameId='$gameId' order by Id";
